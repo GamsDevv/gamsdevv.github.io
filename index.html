@@ -14,7 +14,6 @@
       --border-hi:  #2563eb;
       --accent:     #3b82f6;
       --accent2:    #60a5fa;
-      --accent-glow:#1d4ed8;
       --text:       #e2e8f0;
       --text-dim:   #64748b;
       --text-bright:#f8fafc;
@@ -26,9 +25,7 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
-
     body {
       background: var(--bg-deep);
       color: var(--text);
@@ -38,24 +35,22 @@
       overflow-x: hidden;
     }
 
-    /* ── Scanline overlay ── */
+    /* Scanline — pointer-events off, z-index BELOW modal */
     body::before {
       content: '';
       position: fixed; inset: 0;
       background: repeating-linear-gradient(
         0deg,
-        transparent,
-        transparent 2px,
-        rgba(0,0,0,.08) 2px,
-        rgba(0,0,0,.08) 4px
+        transparent, transparent 2px,
+        rgba(0,0,0,.07) 2px, rgba(0,0,0,.07) 4px
       );
       pointer-events: none;
-      z-index: 9999;
+      z-index: 50;
     }
 
     /* ── NAV ── */
     nav {
-      position: sticky; top: 0; z-index: 100;
+      position: sticky; top: 0; z-index: 200;
       background: rgba(10,13,20,.92);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--border);
@@ -65,41 +60,33 @@
     }
     .nav-logo {
       display: flex; align-items: center; gap: 10px;
-      font-family: var(--mono);
-      font-size: 1.1rem;
-      color: var(--accent2);
-      letter-spacing: .05em;
+      font-family: var(--mono); font-size: 1.1rem;
+      color: var(--accent2); letter-spacing: .05em;
     }
     .nav-logo .dot {
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--red);
-      box-shadow: 0 0 8px var(--red);
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--red); box-shadow: 0 0 8px var(--red);
       animation: pulse-red 1.8s ease-in-out infinite;
     }
     @keyframes pulse-red {
-      0%,100% { opacity: 1; transform: scale(1); }
-      50%      { opacity: .5; transform: scale(.7); }
+      0%,100% { opacity:1; transform:scale(1); }
+      50%      { opacity:.5; transform:scale(.7); }
     }
     .nav-links { display: flex; gap: 2rem; }
     .nav-links a {
-      color: var(--text-dim);
-      text-decoration: none;
-      font-size: .95rem;
-      font-weight: 500;
-      letter-spacing: .06em;
-      text-transform: uppercase;
+      color: var(--text-dim); text-decoration: none;
+      font-size: .95rem; font-weight: 500;
+      letter-spacing: .06em; text-transform: uppercase;
       transition: color .2s;
     }
     .nav-links a:hover { color: var(--accent2); }
 
     /* ── HERO ── */
     .hero {
-      position: relative;
-      min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      text-align: center;
-      padding: 6rem 2rem 4rem;
+      position: relative; min-height: 100vh;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center; padding: 6rem 2rem 4rem;
       overflow: hidden;
     }
     .hero-grid {
@@ -107,93 +94,71 @@
       background-image:
         linear-gradient(var(--border) 1px, transparent 1px),
         linear-gradient(90deg, var(--border) 1px, transparent 1px);
-      background-size: 60px 60px;
-      opacity: .18;
+      background-size: 60px 60px; opacity: .18;
     }
     .hero-glow {
-      position: absolute;
-      width: 700px; height: 400px;
+      position: absolute; width: 700px; height: 400px;
       background: radial-gradient(ellipse, rgba(37,99,235,.25) 0%, transparent 70%);
       top: 50%; left: 50%; transform: translate(-50%, -60%);
       pointer-events: none;
     }
     .hero-badge {
-      font-family: var(--mono);
-      font-size: .75rem;
-      letter-spacing: .15em;
-      color: var(--accent);
-      border: 1px solid var(--border-hi);
-      border-radius: 2px;
-      padding: .25rem .75rem;
-      margin-bottom: 1.5rem;
-      text-transform: uppercase;
-      display: inline-block;
+      font-family: var(--mono); font-size: .75rem;
+      letter-spacing: .15em; color: var(--accent);
+      border: 1px solid var(--border-hi); border-radius: 2px;
+      padding: .25rem .75rem; margin-bottom: 1.5rem;
+      text-transform: uppercase; display: inline-block;
       background: rgba(37,99,235,.08);
+      position: relative; z-index: 2;
     }
     .hero h1 {
       font-family: var(--mono);
       font-size: clamp(2.5rem, 7vw, 5rem);
-      color: var(--text-bright);
-      letter-spacing: -.02em;
-      line-height: 1.1;
-      margin-bottom: .5rem;
+      color: var(--text-bright); letter-spacing: -.02em;
+      line-height: 1.1; margin-bottom: .5rem;
+      position: relative; z-index: 2;
     }
     .hero h1 span { color: var(--accent2); }
     .hero-sub {
-      font-size: 1.2rem;
-      color: var(--text-dim);
-      max-width: 540px;
-      margin: 1rem auto 2.5rem;
+      font-size: 1.2rem; color: var(--text-dim);
+      max-width: 540px; margin: 1rem auto 2.5rem;
       letter-spacing: .02em;
+      position: relative; z-index: 2;
     }
-    .cta-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .cta-row {
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      position: relative; z-index: 10;
+    }
 
     /* ── BUTTONS ── */
     .btn {
       display: inline-flex; align-items: center; gap: 8px;
       font-family: var(--sans); font-size: 1rem; font-weight: 600;
       letter-spacing: .06em; text-transform: uppercase;
-      padding: .65rem 1.6rem;
-      border-radius: 3px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all .2s;
-      border: 1px solid transparent;
+      padding: .65rem 1.6rem; border-radius: 3px;
+      cursor: pointer; text-decoration: none;
+      transition: all .2s; border: 1px solid transparent;
     }
     .btn-primary {
-      background: var(--accent);
-      color: #fff;
-      border-color: var(--accent);
+      background: var(--accent); color: #fff; border-color: var(--accent);
       box-shadow: 0 0 24px rgba(59,130,246,.35);
     }
     .btn-primary:hover {
-      background: var(--accent2);
-      border-color: var(--accent2);
-      box-shadow: 0 0 40px rgba(96,165,250,.5);
-      transform: translateY(-1px);
+      background: var(--accent2); border-color: var(--accent2);
+      box-shadow: 0 0 40px rgba(96,165,250,.5); transform: translateY(-1px);
     }
     .btn-ghost {
-      background: transparent;
-      color: var(--accent2);
+      background: transparent; color: var(--accent2);
       border-color: var(--border-hi);
     }
-    .btn-ghost:hover {
-      background: rgba(37,99,235,.12);
-      transform: translateY(-1px);
-    }
+    .btn-ghost:hover { background: rgba(37,99,235,.12); transform: translateY(-1px); }
     .btn svg { width: 18px; height: 18px; flex-shrink: 0; }
 
-    /* ── WINDOW MOCKUP ── */
-    .mockup-wrap {
-      margin-top: 4rem;
-      position: relative;
-      display: inline-block;
-    }
+    /* ── HERO WINDOW MOCKUP ── */
+    .mockup-wrap { margin-top: 4rem; position: relative; display: inline-block; z-index: 2; }
     .window {
-      background: var(--bg-panel);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      overflow: hidden;
+      background: var(--bg-panel); border: 1px solid var(--border);
+      border-radius: 6px; overflow: hidden;
       box-shadow: 0 0 60px rgba(37,99,235,.2), 0 24px 80px rgba(0,0,0,.7);
       width: min(700px, 90vw);
       animation: float 4s ease-in-out infinite;
@@ -203,248 +168,139 @@
       50%      { transform: translateY(-8px); }
     }
     .titlebar {
-      background: #0b111e;
-      border-bottom: 1px solid var(--border);
+      background: #0b111e; border-bottom: 1px solid var(--border);
       padding: .5rem 1rem;
       display: flex; align-items: center; justify-content: space-between;
     }
     .titlebar-left { display: flex; align-items: center; gap: 8px; }
-    .titlebar-icon { font-size: 1rem; }
-    .titlebar-title {
-      font-family: var(--mono);
-      font-size: .85rem;
-      color: var(--text-dim);
-    }
+    .titlebar-title { font-family: var(--mono); font-size: .85rem; color: var(--text-dim); }
     .titlebar-controls { display: flex; gap: 6px; }
     .tbc {
       width: 22px; height: 22px; border-radius: 2px;
-      border: 1px solid var(--border);
-      background: var(--bg-card);
+      border: 1px solid var(--border); background: var(--bg-card);
       display: flex; align-items: center; justify-content: center;
-      font-size: .65rem; color: var(--text-dim);
-      cursor: default;
+      font-size: .65rem; color: var(--text-dim); cursor: default;
     }
     .tbc.close { color: var(--red); border-color: var(--red); }
-
     .window-body { padding: 1rem; }
     .win-btn-grid {
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: .5rem;
-      margin-bottom: .75rem;
+      display: grid; grid-template-columns: repeat(3,1fr);
+      gap: .5rem; margin-bottom: .75rem;
     }
     .win-btn {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      color: var(--text);
-      font-family: var(--mono);
-      font-size: .8rem;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 3px; color: var(--text);
+      font-family: var(--mono); font-size: .8rem;
       padding: .45rem .5rem;
       display: flex; align-items: center; justify-content: center; gap: 6px;
-      cursor: default;
-      transition: border-color .2s, background .2s;
+      cursor: default; transition: border-color .2s, background .2s;
     }
     .win-btn:hover { border-color: var(--accent); background: rgba(37,99,235,.1); }
-    .win-btn .icon { font-size: .9rem; }
-    .win-btn .icon.red  { color: var(--red); }
-    .win-btn .icon.blue { color: var(--accent); }
-    .win-btn .icon.yellow { color: var(--yellow); }
-    .win-btn .icon.green { color: var(--green); }
-    .win-keys {
-      font-family: var(--mono);
-      font-size: .7rem;
-      color: var(--text-dim);
-      letter-spacing: .04em;
-    }
+    .icon-red    { color: var(--red); }
+    .icon-blue   { color: var(--accent); }
+    .icon-yellow { color: var(--yellow); }
+    .win-keys { font-family: var(--mono); font-size: .7rem; color: var(--text-dim); letter-spacing: .04em; }
     .key {
-      display: inline-block;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: .05rem .3rem;
-      font-size: .65rem;
-      color: var(--accent2);
-      margin: 0 1px;
+      display: inline-block; background: var(--bg-card);
+      border: 1px solid var(--border); border-radius: 2px;
+      padding: .05rem .3rem; font-size: .65rem; color: var(--accent2); margin: 0 1px;
     }
 
-    /* ── SECTION SHARED ── */
+    /* ── SECTIONS ── */
     section { padding: 5rem 2rem; max-width: 1100px; margin: 0 auto; }
     .section-label {
-      font-family: var(--mono);
-      font-size: .7rem;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: .5rem;
+      font-family: var(--mono); font-size: .7rem;
+      letter-spacing: .2em; text-transform: uppercase;
+      color: var(--accent); margin-bottom: .5rem;
     }
     .section-title {
-      font-family: var(--mono);
-      font-size: clamp(1.6rem, 3vw, 2.4rem);
-      color: var(--text-bright);
-      margin-bottom: 1rem;
+      font-family: var(--mono); font-size: clamp(1.6rem, 3vw, 2.4rem);
+      color: var(--text-bright); margin-bottom: 1rem;
     }
-    .section-desc {
-      color: var(--text-dim);
-      max-width: 560px;
-      font-size: 1.05rem;
-    }
-    hr.divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 0 2rem;
-    }
+    .section-desc { color: var(--text-dim); max-width: 560px; font-size: 1.05rem; }
+    hr.divider { border: none; border-top: 1px solid var(--border); margin: 0 2rem; }
 
     /* ── FEATURES ── */
     .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 1.25rem;
-      margin-top: 3rem;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 1.25rem; margin-top: 3rem;
     }
     .feature-card {
-      background: var(--bg-panel);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 1.5rem;
+      background: var(--bg-panel); border: 1px solid var(--border);
+      border-radius: 4px; padding: 1.5rem;
       transition: border-color .2s, transform .2s;
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
     .feature-card::before {
-      content: '';
-      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
       background: linear-gradient(90deg, transparent, var(--accent), transparent);
-      opacity: 0;
-      transition: opacity .3s;
+      opacity: 0; transition: opacity .3s;
     }
     .feature-card:hover { border-color: var(--border-hi); transform: translateY(-3px); }
     .feature-card:hover::before { opacity: 1; }
-    .feature-icon {
-      font-size: 1.6rem;
-      margin-bottom: .75rem;
-      display: block;
-    }
-    .feature-card h3 {
-      font-family: var(--mono);
-      font-size: 1rem;
-      color: var(--text-bright);
-      margin-bottom: .4rem;
-    }
+    .feature-icon { font-size: 1.6rem; margin-bottom: .75rem; display: block; }
+    .feature-card h3 { font-family: var(--mono); font-size: 1rem; color: var(--text-bright); margin-bottom: .4rem; }
     .feature-card p { font-size: .95rem; color: var(--text-dim); line-height: 1.5; }
 
     /* ── STEPS PANEL ── */
     .steps-panel {
-      background: var(--bg-panel);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      margin-top: 3rem;
-      overflow: hidden;
+      background: var(--bg-panel); border: 1px solid var(--border);
+      border-radius: 4px; margin-top: 3rem; overflow: hidden;
     }
     .steps-panel-header {
-      background: #0b111e;
-      border-bottom: 1px solid var(--border);
-      padding: .6rem 1rem;
-      display: flex; align-items: center; gap: 8px;
+      background: #0b111e; border-bottom: 1px solid var(--border);
+      padding: .6rem 1rem; display: flex; align-items: center; gap: 8px;
     }
-    .steps-panel-header span {
-      font-family: var(--mono);
-      font-size: .75rem;
-      color: var(--text-dim);
-      letter-spacing: .1em;
-    }
+    .steps-panel-header span { font-family: var(--mono); font-size: .75rem; color: var(--text-dim); letter-spacing: .1em; }
     .steps-list { padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
     .step { display: flex; gap: 1rem; align-items: flex-start; }
     .step-num {
       width: 28px; height: 28px; border-radius: 50%;
-      border: 1px solid var(--accent);
-      color: var(--accent);
-      font-family: var(--mono);
-      font-size: .75rem;
+      border: 1px solid var(--accent); color: var(--accent);
+      font-family: var(--mono); font-size: .75rem;
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0; margin-top: 2px;
     }
     .step-body h4 { font-family: var(--mono); font-size: .95rem; color: var(--text-bright); margin-bottom: .2rem; }
     .step-body p  { font-size: .9rem; color: var(--text-dim); }
 
-    /* ── KEYBINDS TABLE ── */
-    .keybind-table {
-      width: 100%; border-collapse: collapse; margin-top: 3rem;
-      font-family: var(--mono);
-    }
+    /* ── KEYBINDS ── */
+    .keybind-table { width: 100%; border-collapse: collapse; margin-top: 3rem; font-family: var(--mono); }
     .keybind-table th {
-      background: #0b111e;
-      border: 1px solid var(--border);
-      padding: .5rem 1rem;
-      font-size: .75rem;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      text-align: left;
+      background: #0b111e; border: 1px solid var(--border);
+      padding: .5rem 1rem; font-size: .75rem;
+      letter-spacing: .1em; text-transform: uppercase; color: var(--accent); text-align: left;
     }
-    .keybind-table td {
-      border: 1px solid var(--border);
-      padding: .5rem 1rem;
-      font-size: .85rem;
-      color: var(--text-dim);
-    }
+    .keybind-table td { border: 1px solid var(--border); padding: .5rem 1rem; font-size: .85rem; color: var(--text-dim); }
     .keybind-table tr:hover td { background: rgba(37,99,235,.05); }
     .kbd {
-      display: inline-block;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      padding: .1rem .4rem;
-      font-size: .8rem;
-      color: var(--accent2);
+      display: inline-block; background: var(--bg-card);
+      border: 1px solid var(--border); border-radius: 2px;
+      padding: .1rem .4rem; font-size: .8rem; color: var(--accent2);
     }
 
     /* ── DISCORD CTA ── */
     .discord-cta {
       background: linear-gradient(135deg, #0d1220 0%, #0f1929 100%);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 3rem 2rem;
-      text-align: center;
-      margin: 5rem 2rem;
-      position: relative;
-      overflow: hidden;
+      border: 1px solid var(--border); border-radius: 4px;
+      padding: 3rem 2rem; text-align: center;
+      margin: 5rem 2rem; position: relative; overflow: hidden;
     }
     .discord-cta::before {
-      content: '';
-      position: absolute; inset: 0;
+      content: ''; position: absolute; inset: 0;
       background: radial-gradient(ellipse at center, rgba(88,101,242,.12) 0%, transparent 65%);
       pointer-events: none;
     }
-    .discord-cta h2 {
-      font-family: var(--mono);
-      font-size: 1.8rem;
-      color: var(--text-bright);
-      margin-bottom: .5rem;
-    }
+    .discord-cta h2 { font-family: var(--mono); font-size: 1.8rem; color: var(--text-bright); margin-bottom: .5rem; }
     .discord-cta p { color: var(--text-dim); margin-bottom: 1.5rem; }
-    .btn-discord {
-      background: #5865f2;
-      color: #fff;
-      border-color: #5865f2;
-      box-shadow: 0 0 24px rgba(88,101,242,.4);
-    }
-    .btn-discord:hover {
-      background: #7289da;
-      border-color: #7289da;
-      box-shadow: 0 0 40px rgba(114,137,218,.6);
-      transform: translateY(-1px);
-    }
+    .btn-discord { background: #5865f2; color: #fff; border-color: #5865f2; box-shadow: 0 0 24px rgba(88,101,242,.4); }
+    .btn-discord:hover { background: #7289da; border-color: #7289da; box-shadow: 0 0 40px rgba(114,137,218,.6); transform: translateY(-1px); }
 
     /* ── FOOTER ── */
     footer {
-      border-top: 1px solid var(--border);
-      padding: 1.5rem 2rem;
-      text-align: center;
-      font-family: var(--mono);
-      font-size: .75rem;
-      color: var(--text-dim);
-      letter-spacing: .06em;
+      border-top: 1px solid var(--border); padding: 1.5rem 2rem;
+      text-align: center; font-family: var(--mono);
+      font-size: .75rem; color: var(--text-dim); letter-spacing: .06em;
     }
     footer span { color: var(--accent); }
 
@@ -452,156 +308,107 @@
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
     .reveal.visible { opacity: 1; transform: translateY(0); }
 
-    /* ── MODAL ── */
-    .modal-overlay {
-      position: fixed; inset: 0; z-index: 10000;
-      background: rgba(0,0,0,.85);
+    /* ══════════════════════════════════════
+       MODAL
+    ══════════════════════════════════════ */
+    #learnMoreModal {
+      display: none;
+      position: fixed; inset: 0;
+      z-index: 9000;
+      background: rgba(0,0,0,.82);
       backdrop-filter: blur(6px);
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none;
-      transition: opacity .25s;
+      align-items: center;
+      justify-content: center;
     }
-    .modal-overlay.open { opacity: 1; pointer-events: all; }
+    #learnMoreModal.open { display: flex; }
+
     .modal-box {
       background: var(--bg-panel);
       border: 1px solid var(--border-hi);
       border-radius: 6px;
-      box-shadow: 0 0 80px rgba(37,99,235,.35), 0 32px 100px rgba(0,0,0,.8);
+      box-shadow: 0 0 80px rgba(37,99,235,.4), 0 32px 100px rgba(0,0,0,.9);
       width: min(760px, 95vw);
       overflow: hidden;
-      transform: translateY(20px) scale(.97);
-      transition: transform .25s;
+      animation: modalIn .22s ease;
     }
-    .modal-overlay.open .modal-box { transform: translateY(0) scale(1); }
+    @keyframes modalIn {
+      from { transform: translateY(16px) scale(.97); opacity: 0; }
+      to   { transform: translateY(0) scale(1); opacity: 1; }
+    }
     .modal-titlebar {
-      background: #0b111e;
-      border-bottom: 1px solid var(--border);
+      background: #0b111e; border-bottom: 1px solid var(--border);
       padding: .5rem 1rem;
       display: flex; align-items: center; justify-content: space-between;
     }
     .modal-titlebar-left { display: flex; align-items: center; gap: 8px; }
     .modal-title { font-family: var(--mono); font-size: .85rem; color: var(--text-dim); }
     .modal-close {
-      width: 24px; height: 24px; border-radius: 2px;
-      border: 1px solid var(--red);
-      background: var(--bg-card);
+      width: 26px; height: 26px; border-radius: 2px;
+      border: 1px solid var(--red); background: var(--bg-card);
       color: var(--red);
       display: flex; align-items: center; justify-content: center;
-      font-size: .7rem; cursor: pointer;
-      transition: background .15s;
+      font-size: .75rem; cursor: pointer; transition: background .15s;
+      font-family: var(--mono); user-select: none;
     }
-    .modal-close:hover { background: rgba(239,68,68,.2); }
+    .modal-close:hover { background: rgba(239,68,68,.25); }
     .modal-body { padding: 1.25rem; }
 
-    /* Inner window replica */
-    .inner-window {
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-      background: var(--bg-deep);
-    }
+    /* Inner window */
+    .iw { border: 1px solid var(--border); border-radius: 4px; overflow: hidden; background: var(--bg-deep); font-family: var(--mono); }
     .iw-bar {
-      background: #0b111e;
-      border-bottom: 1px solid var(--border);
+      background: #0b111e; border-bottom: 1px solid var(--border);
       padding: .4rem .75rem;
       display: flex; align-items: center; justify-content: space-between;
     }
-    .iw-bar-title { font-family: var(--mono); font-size: .8rem; color: var(--text-dim); display:flex; align-items:center; gap:6px;}
-    .iw-controls { display:flex; gap:4px; }
-    .iw-ctrl { width:20px; height:20px; border-radius:2px; border:1px solid var(--border); background:var(--bg-card); display:flex; align-items:center; justify-content:center; font-size:.6rem; color:var(--text-dim); }
-    .iw-ctrl.red { color:var(--red); border-color:var(--red); }
-
-    .iw-content { display: flex; }
-    /* Left pane */
+    .iw-bar-title { display: flex; align-items: center; gap: 6px; font-size: .8rem; color: var(--text-dim); }
+    .iw-controls { display: flex; gap: 4px; }
+    .iw-ctrl {
+      width: 20px; height: 20px; border-radius: 2px;
+      border: 1px solid var(--border); background: var(--bg-card);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .6rem; color: var(--text-dim);
+    }
+    .iw-ctrl.red { color: var(--red); border-color: var(--red); }
+    .iw-main { display: flex; }
     .iw-left {
-      width: 220px; flex-shrink: 0;
-      border-right: 1px solid var(--border);
-      padding: .75rem;
-      display: flex; flex-direction: column; gap: .6rem;
+      width: 210px; flex-shrink: 0; border-right: 1px solid var(--border);
+      padding: .75rem; display: flex; flex-direction: column; gap: .55rem;
     }
-    .iw-pane-label { font-family: var(--mono); font-size: .65rem; letter-spacing: .12em; color: var(--text-dim); margin-bottom: .25rem; }
-    .iw-task-list {
-      background: #080c14;
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      height: 200px;
-      overflow: hidden;
-    }
-    .iw-task-item {
-      padding: .3rem .5rem;
-      font-family: var(--mono); font-size: .75rem;
-      display: flex; justify-content: space-between;
-    }
-    .iw-task-item.selected { background: var(--accent); color: #fff; }
-    .iw-task-item:not(.selected) { color: var(--text-dim); }
-    .iw-btn-row { display:flex; gap:.4rem; }
+    .iw-lbl { font-size: .62rem; letter-spacing: .12em; color: var(--text-dim); margin-bottom: .2rem; }
+    .iw-list { background: #080c14; border: 1px solid var(--border); border-radius: 2px; height: 190px; overflow: hidden; }
+    .iw-list-item { padding: .28rem .5rem; font-size: .75rem; display: flex; justify-content: space-between; }
+    .iw-list-item.sel { background: var(--accent); color: #fff; }
+    .iw-list-item:not(.sel) { color: var(--text-dim); }
+    .iw-row { display: flex; gap: .4rem; }
     .iw-btn {
-      flex: 1;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      font-family: var(--mono); font-size: .7rem;
-      color: var(--text);
-      padding: .3rem .2rem;
-      text-align: center;
-      cursor: default;
+      flex: 1; background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 2px; font-family: var(--mono); font-size: .7rem;
+      color: var(--text); padding: .28rem .2rem; text-align: center; cursor: default;
     }
-    .iw-name-row { display:flex; align-items:center; gap:.5rem; }
-    .iw-name-label { font-family:var(--mono); font-size:.7rem; color:var(--text-dim); white-space:nowrap; }
-    .iw-name-input {
-      flex:1; background:#080c14; border:1px solid var(--border);
-      border-radius:2px; height:22px; color:var(--text-dim);
-    }
-
-    /* Right pane */
-    .iw-right { flex: 1; padding: .75rem; display:flex; flex-direction:column; gap:.6rem; }
-    .iw-steps-box {
-      background: #080c14;
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      height: 200px;
-    }
-    .iw-action-row { display:flex; gap:.4rem; flex-wrap:wrap; }
+    .iw-name { display: flex; align-items: center; gap: .5rem; }
+    .iw-name-lbl { font-size: .7rem; color: var(--text-dim); white-space: nowrap; }
+    .iw-name-inp { flex: 1; background: #080c14; border: 1px solid var(--border); border-radius: 2px; height: 20px; }
+    .iw-right { flex: 1; padding: .75rem; display: flex; flex-direction: column; gap: .55rem; }
+    .iw-steps-box { background: #080c14; border: 1px solid var(--border); border-radius: 2px; height: 190px; }
+    .iw-action-row { display: flex; gap: .4rem; flex-wrap: wrap; }
     .iw-action-btn {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      font-family: var(--mono); font-size: .7rem;
-      color: var(--text);
-      padding: .3rem .6rem;
-      cursor: default;
-      white-space: nowrap;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 2px; font-family: var(--mono); font-size: .7rem;
+      color: var(--text); padding: .28rem .55rem; cursor: default; white-space: nowrap;
     }
-    .iw-keys-line {
-      font-family: var(--mono); font-size: .65rem; color: var(--text-dim);
-    }
-    .iw-keys-line .key { margin:0 1px; }
-    .iw-add-wait {
-      font-family: var(--mono); font-size: .65rem;
-      color: var(--accent);
-      letter-spacing: .05em;
-    }
-    .iw-wait-row { display:flex; gap:.4rem; flex-wrap:wrap; }
+    .iw-keys { font-size: .63rem; color: var(--text-dim); }
+    .iw-add { font-size: .63rem; color: var(--accent); letter-spacing: .04em; }
+    .iw-wait-row { display: flex; gap: .4rem; flex-wrap: wrap; }
     .iw-wait-btn {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 2px;
-      font-family: var(--mono); font-size: .7rem;
-      color: var(--text);
-      padding: .3rem .6rem;
-      cursor: default;
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 2px; font-family: var(--mono); font-size: .7rem;
+      color: var(--text); padding: .28rem .55rem; cursor: default;
     }
-    .iw-status {
-      font-family: var(--mono); font-size: .65rem;
-      color: var(--green);
-      border-top: 1px solid var(--border);
-      padding: .4rem .75rem;
-    }
+    .iw-status { font-size: .65rem; color: var(--green); border-top: 1px solid var(--border); padding: .38rem .75rem; }
   </style>
 </head>
 <body>
 
-<!-- NAV -->
 <nav>
   <div class="nav-logo">
     <div class="dot"></div>
@@ -615,36 +422,27 @@
   </div>
 </nav>
 
-<!-- HERO -->
 <div class="hero">
   <div class="hero-grid"></div>
   <div class="hero-glow"></div>
-
   <div class="hero-badge">AutoHotkey Macro &bull; Free to Use</div>
   <h1>Gams <span>Task</span></h1>
-  <p class="hero-sub">
-    A powerful AHK macro with task recording, OCR waiting, color detection,
-    and full hotkey control. Automate anything.
-  </p>
-
+  <p class="hero-sub">A powerful AHK macro with task recording, OCR waiting, color detection, and full hotkey control. Automate anything.</p>
   <div class="cta-row">
     <a class="btn btn-primary" href="https://discord.gg/aM8j5Bk3ZN" target="_blank">
-      <!-- Discord icon -->
       <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.053a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
       Download &amp; Join Discord
     </a>
-    <a class="btn btn-ghost" href="#features" id="learnMoreBtn">
+    <button class="btn btn-ghost" id="learnMoreBtn" type="button">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
       Learn More
-    </a>
+    </button>
   </div>
-
-  <!-- Window mockup -->
   <div class="mockup-wrap reveal">
     <div class="window">
       <div class="titlebar">
         <div class="titlebar-left">
-          <span class="titlebar-icon">⚡</span>
+          <span>⚡</span>
           <span class="titlebar-title">Gams Task</span>
         </div>
         <div class="titlebar-controls">
@@ -654,19 +452,15 @@
       </div>
       <div class="window-body">
         <div class="win-btn-grid">
-          <div class="win-btn"><span class="icon red">●</span> Record</div>
-          <div class="win-btn"><span class="icon blue">◄</span> Previous</div>
-          <div class="win-btn"><span class="icon blue">►</span> Next</div>
-          <div class="win-btn"><span class="icon blue">💾</span> Save</div>
-          <div class="win-btn"><span class="icon yellow">📁</span> Load</div>
-          <div class="win-btn"><span class="icon blue">⚙</span> Setup</div>
+          <div class="win-btn"><span class="icon-red">●</span> Record</div>
+          <div class="win-btn"><span class="icon-blue">◄</span> Previous</div>
+          <div class="win-btn"><span class="icon-blue">►</span> Next</div>
+          <div class="win-btn"><span class="icon-blue">💾</span> Save</div>
+          <div class="win-btn"><span class="icon-yellow">📁</span> Load</div>
+          <div class="win-btn"><span class="icon-blue">⚙</span> Setup</div>
         </div>
         <div class="win-keys">
-          Keys:
-          <span class="key">Record F1</span>
-          <span class="key">Play F8</span>
-          <span class="key">Stop F9</span>
-          <span class="key">Pick F6</span>
+          Keys: <span class="key">Record F1</span> <span class="key">Play F8</span> <span class="key">Stop F9</span> <span class="key">Pick F6</span>
         </div>
       </div>
     </div>
@@ -675,114 +469,46 @@
 
 <hr class="divider"/>
 
-<!-- FEATURES -->
 <section id="features">
   <div class="section-label">// capabilities</div>
   <h2 class="section-title">What Gams Task Can Do</h2>
   <p class="section-desc">A full-featured macro suite with everything you need to automate repetitive workflows.</p>
-
   <div class="features-grid">
-    <div class="feature-card reveal">
-      <span class="feature-icon">⏺️</span>
-      <h3>Task Recording</h3>
-      <p>Record any sequence of actions and replay them on demand. Named tasks keep your macros organized.</p>
-    </div>
-    <div class="feature-card reveal">
-      <span class="feature-icon">🔤</span>
-      <h3>Wait OCR</h3>
-      <p>Pause execution until specific text appears on screen using optical character recognition before continuing playback.</p>
-    </div>
-    <div class="feature-card reveal">
-      <span class="feature-icon">📐</span>
-      <h3>Wait Area</h3>
-      <p>Define screen regions and wait for changes or activity within a specific area before advancing.</p>
-    </div>
-    <div class="feature-card reveal">
-      <span class="feature-icon">🎨</span>
-      <h3>Wait Color</h3>
-      <p>Detect pixel colors and hold execution until the target color appears — perfect for game automation.</p>
-    </div>
-    <div class="feature-card reveal">
-      <span class="feature-icon">📋</span>
-      <h3>Step Management</h3>
-      <p>Insert, edit, and remove individual steps from any task with full control over execution order.</p>
-    </div>
-    <div class="feature-card reveal">
-      <span class="feature-icon">⚡</span>
-      <h3>Hotkey Control</h3>
-      <p>Full keyboard shortcut support — record, play, stop, and pick without touching the mouse.</p>
-    </div>
+    <div class="feature-card reveal"><span class="feature-icon">⏺️</span><h3>Task Recording</h3><p>Record any sequence of actions and replay them on demand. Named tasks keep your macros organized.</p></div>
+    <div class="feature-card reveal"><span class="feature-icon">🔤</span><h3>Wait OCR</h3><p>Pause execution until specific text appears on screen using optical character recognition before continuing playback.</p></div>
+    <div class="feature-card reveal"><span class="feature-icon">📐</span><h3>Wait Area</h3><p>Define screen regions and wait for changes or activity within a specific area before advancing.</p></div>
+    <div class="feature-card reveal"><span class="feature-icon">🎨</span><h3>Wait Color</h3><p>Detect pixel colors and hold execution until the target color appears — perfect for game automation.</p></div>
+    <div class="feature-card reveal"><span class="feature-icon">📋</span><h3>Step Management</h3><p>Insert, edit, and remove individual steps from any task with full control over execution order.</p></div>
+    <div class="feature-card reveal"><span class="feature-icon">⚡</span><h3>Hotkey Control</h3><p>Full keyboard shortcut support — record, play, stop, and pick without touching the mouse.</p></div>
   </div>
 </section>
 
 <hr class="divider"/>
 
-<!-- HOW TO USE -->
 <section id="howto">
   <div class="section-label">// getting started</div>
   <h2 class="section-title">How To Use</h2>
   <p class="section-desc">Up and running in under two minutes.</p>
-
   <div class="steps-panel reveal">
-    <div class="steps-panel-header">
-      <span>SETUP_GUIDE.md</span>
-    </div>
+    <div class="steps-panel-header"><span>SETUP_GUIDE.md</span></div>
     <div class="steps-list">
-      <div class="step">
-        <div class="step-num">1</div>
-        <div class="step-body">
-          <h4>Join Discord & Download</h4>
-          <p>Click the Download button above. You'll be redirected to our Discord server where you can grab the latest <code>.ahk</code> file.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">2</div>
-        <div class="step-body">
-          <h4>Install AutoHotkey</h4>
-          <p>Download and install <strong>AutoHotkey v1.1</strong> from autohotkey.com if you haven't already.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">3</div>
-        <div class="step-body">
-          <h4>Run the Script</h4>
-          <p>Double-click <code>GamsTask.ahk</code> to launch the macro panel. It will appear in your system tray.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">4</div>
-        <div class="step-body">
-          <h4>Create a Task</h4>
-          <p>Press <strong>F1</strong> or click <em>Record</em> to start recording. Perform your actions, then press <strong>F9</strong> to stop.</p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step-num">5</div>
-        <div class="step-body">
-          <h4>Play It Back</h4>
-          <p>Select your saved task and press <strong>F8</strong> to replay it any time you need it.</p>
-        </div>
-      </div>
+      <div class="step"><div class="step-num">1</div><div class="step-body"><h4>Join Discord &amp; Download</h4><p>Click the Download button above. You'll be redirected to our Discord server where you can grab the latest <code>.ahk</code> file.</p></div></div>
+      <div class="step"><div class="step-num">2</div><div class="step-body"><h4>Install AutoHotkey</h4><p>Download and install <strong>AutoHotkey v1.1</strong> from autohotkey.com if you haven't already.</p></div></div>
+      <div class="step"><div class="step-num">3</div><div class="step-body"><h4>Run the Script</h4><p>Double-click <code>GamsTask.ahk</code> to launch the macro panel. It will appear in your system tray.</p></div></div>
+      <div class="step"><div class="step-num">4</div><div class="step-body"><h4>Create a Task</h4><p>Press <strong>F1</strong> or click <em>Record</em> to start recording. Perform your actions, then press <strong>F9</strong> to stop.</p></div></div>
+      <div class="step"><div class="step-num">5</div><div class="step-body"><h4>Play It Back</h4><p>Select your saved task and press <strong>F8</strong> to replay it any time you need it.</p></div></div>
     </div>
   </div>
 </section>
 
 <hr class="divider"/>
 
-<!-- KEYBINDS -->
 <section id="keybinds">
   <div class="section-label">// hotkeys</div>
   <h2 class="section-title">Keyboard Shortcuts</h2>
-  <p class="section-desc">Control every action without leaving your keyboard.</p>
-
+  <p class="section-desc">Customizable keybinds.</p>
   <table class="keybind-table reveal">
-    <thead>
-      <tr>
-        <th>Key</th>
-        <th>Action</th>
-        <th>Description</th>
-      </tr>
-    </thead>
+    <thead><tr><th>Key</th><th>Action</th><th>Description</th></tr></thead>
     <tbody>
       <tr><td><span class="kbd">F1</span></td><td>Record</td><td>Start recording a new macro task</td></tr>
       <tr><td><span class="kbd">F8</span></td><td>Play</td><td>Play back the selected task</td></tr>
@@ -792,34 +518,31 @@
   </table>
 </section>
 
-<!-- DISCORD CTA -->
 <div class="discord-cta reveal">
   <h2>Join the Community</h2>
   <p>Get support, share your macros, and download the latest version on Discord.</p>
-  <a class="btn btn-discord btn" href="https://discord.gg/aM8j5Bk3ZN" target="_blank">
+  <a class="btn btn-discord" href="https://discord.gg/aM8j5Bk3ZN" target="_blank">
     <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.053a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
     Join Discord — Get the Macro
   </a>
 </div>
 
-<!-- FOOTER -->
 <footer>
   <span>GAMS_TASK</span> &mdash; AutoHotkey Macro &mdash; All rights reserved &copy; 2025
 </footer>
 
-<!-- LEARN MORE MODAL -->
-<div class="modal-overlay" id="learnMoreModal">
-  <div class="modal-box">
+<!-- MODAL -->
+<div id="learnMoreModal">
+  <div class="modal-box" id="modalBox">
     <div class="modal-titlebar">
       <div class="modal-titlebar-left">
-        <span style="font-size:.9rem">⚡</span>
+        <span>⚡</span>
         <span class="modal-title">Gams Task — Full Interface Preview</span>
       </div>
       <div class="modal-close" id="modalClose">✕</div>
     </div>
     <div class="modal-body">
-      <div class="inner-window">
-        <!-- Titlebar -->
+      <div class="iw">
         <div class="iw-bar">
           <div class="iw-bar-title">⚡ Gams Task</div>
           <div class="iw-controls">
@@ -827,27 +550,24 @@
             <div class="iw-ctrl red">✕</div>
           </div>
         </div>
-        <!-- Main content -->
-        <div class="iw-content">
-          <!-- Left: Tasks -->
+        <div class="iw-main">
           <div class="iw-left">
-            <div class="iw-pane-label">TASKS</div>
-            <div class="iw-task-list">
-              <div class="iw-task-item selected"><span>Task 1</span><span>0</span></div>
+            <div class="iw-lbl">TASKS</div>
+            <div class="iw-list">
+              <div class="iw-list-item sel"><span>Task 1</span><span>0</span></div>
             </div>
-            <div class="iw-btn-row">
+            <div class="iw-row">
               <div class="iw-btn">New</div>
               <div class="iw-btn">Insert</div>
               <div class="iw-btn">Delete</div>
             </div>
-            <div class="iw-name-row">
-              <span class="iw-name-label">Name</span>
-              <div class="iw-name-input"></div>
+            <div class="iw-name">
+              <span class="iw-name-lbl">Name</span>
+              <div class="iw-name-inp"></div>
             </div>
           </div>
-          <!-- Right: Steps -->
           <div class="iw-right">
-            <div class="iw-pane-label">STEPS</div>
+            <div class="iw-lbl">STEPS</div>
             <div class="iw-steps-box"></div>
             <div class="iw-action-row">
               <div class="iw-action-btn">Record</div>
@@ -857,10 +577,8 @@
               <div class="iw-action-btn">Load</div>
               <div class="iw-action-btn">Settings</div>
             </div>
-            <div class="iw-keys-line">
-              Keys: <span class="key">Record F1</span> <span class="key">Play F8</span> <span class="key">Stop F9</span> <span class="key">Pick F6</span>
-            </div>
-            <div class="iw-add-wait">ADD WAIT STEP</div>
+            <div class="iw-keys">Keys: <span class="key">Record F1</span> <span class="key">Play F8</span> <span class="key">Stop F9</span> <span class="key">Pick F6</span></div>
+            <div class="iw-add">ADD WAIT STEP</div>
             <div class="iw-wait-row">
               <div class="iw-wait-btn">Wait OCR</div>
               <div class="iw-wait-btn">Wait Area</div>
@@ -878,27 +596,36 @@
 
 <script>
   // Scroll reveal
-  const observer = new IntersectionObserver(entries => {
+  const io = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
 
   // Modal
-  const modal   = document.getElementById('learnMoreModal');
-  const openBtn = document.getElementById('learnMoreBtn');
-  const closeBtn= document.getElementById('modalClose');
+  const modal    = document.getElementById('learnMoreModal');
+  const modalBox = document.getElementById('modalBox');
+  const openBtn  = document.getElementById('learnMoreBtn');
+  const closeBtn = document.getElementById('modalClose');
 
-  openBtn.addEventListener('click', e => {
-    e.preventDefault();
+  openBtn.addEventListener('click', function() {
     modal.classList.add('open');
     document.body.style.overflow = 'hidden';
   });
-  closeBtn.addEventListener('click', () => {
+
+  closeBtn.addEventListener('click', function() {
     modal.classList.remove('open');
     document.body.style.overflow = '';
   });
-  modal.addEventListener('click', e => {
-    if (e.target === modal) {
+
+  modal.addEventListener('click', function(e) {
+    if (!modalBox.contains(e.target)) {
+      modal.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
       modal.classList.remove('open');
       document.body.style.overflow = '';
     }
